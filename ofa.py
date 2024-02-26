@@ -14,9 +14,15 @@ import os
 import pickle
 import requests
 from tqdm import tqdm
+import os
+import urllib.request
+
 
 class OFA_PhraseGrounding:
-    def __init__(self, cp='checkpoints/refcocog_large_best.pt'):
+    def __init__(self, file_path = "checkpoints/refcocog.pt", url = "https://ofa-silicon.oss-us-west-1.aliyuncs.com/checkpoints/refcocog_large_best.pt"):
+        os.makedirs("checkpoints/", exist_ok=True)     
+        if not os.path.exists(file_path): 
+            urllib.request.urlretrieve(url, file_path)
         self.mean = [0.5, 0.5, 0.5]
         self.std = [0.5, 0.5, 0.5]
         tasks.register_task('refcoco', RefcocoTask)
@@ -24,7 +30,7 @@ class OFA_PhraseGrounding:
         self.use_fp16 = True
         overrides={"bpe_dir":"ext/OFA/utils/BPE"}
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        cp = os.path.join(current_dir, cp)
+        cp = os.path.join(file_path)
         self.models, cfg, self.task = checkpoint_utils.load_model_ensemble_and_task(
                 utils.split_paths(cp),
                 arg_overrides=overrides
