@@ -30,7 +30,7 @@ from fairseq.data.audio.audio_utils import (
 from pathlib import Path
 import soundfile as sf
 import librosa
-import torchaudio
+# import torchaudio
 from typing import List
 
 from pypinyin import pinyin, Style
